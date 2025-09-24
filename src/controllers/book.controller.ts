@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Path, Post, Route, Tags} from "tsoa";
+import {Body, Controller, Get, Patch, Path, Post, Route, Tags} from "tsoa";
 import { BookDTO } from "../dto/book.dto";
 import { bookService } from "../services/book.service";
 import {AuthorDTO} from "../dto/author.dto";
@@ -40,6 +40,20 @@ export class BookController extends Controller {
     }
 
     return bookService.createBook(title, publishYear, author?.id, isbn);
+  }
+
+  //Met à jour un livre par ID
+  @Patch("{id}")
+  public async updateBook(@Path() id: number, @Body() requestBody : BookDTO): Promise<BookDTO | null>{
+    const { title, publishYear, author, isbn } = requestBody;
+
+    if(author?.id === undefined){
+      let error: Error = new Error("Author ID is required to edit a book");
+      (error as any).status = 404;
+      throw error;
+    }
+
+    return bookService.updateBook(id, title, publishYear, author?.id, isbn);
   }
 }
 
