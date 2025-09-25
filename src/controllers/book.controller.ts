@@ -5,6 +5,8 @@ import {AuthorDTO} from "../dto/author.dto";
 import {Author} from "../models/author.model";
 import {authorService} from "../services/author.service";
 import {Book} from "../models/book.model";
+import {BookCopy} from "../models/bookCopy.model";
+import {BookCopyDTO} from "../dto/bookCopy.dto";
 
 @Route("books")
 @Tags("Books")
@@ -27,6 +29,13 @@ export class BookController extends Controller {
             return book;
         }
     }
+
+    // Récupère la liste d'exemplaire d'un livre
+    /*@Get("{id}/books-collections")
+    public async getBooksBookCopies(@Path id: number): Promise<BookCopyDTO[] | null>{
+        let books;
+        let bookCopies;
+    }*/
 
     // Créer un nouveau livre
     @Post("/")

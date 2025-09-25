@@ -2,6 +2,7 @@ import { Author } from "../models/author.model";
 import { Book } from "../models/book.model";
 import {AuthorDTO} from "../dto/author.dto";
 import {bookCopyService} from "./bookCollection.service";
+import {BookCopy} from "../models/bookCopy.model";
 
 export class BookService {
   public async getAllBooks(): Promise<Book[]> {
@@ -74,6 +75,11 @@ export class BookService {
 
         return authorBooks;
     }
+
+    //Récupère une liste d'exemplaire d'un livre
+    /*public async getBooksBookCopies(id: number): Promise<BookCopy[] | null>{
+      const book = await Book.findByPk(id);
+    }*/
 }
 
 export const bookService = new BookService();
