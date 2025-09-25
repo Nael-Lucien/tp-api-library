@@ -1,6 +1,7 @@
 import { Author } from "../models/author.model";
 import { Book } from "../models/book.model";
 import {AuthorDTO} from "../dto/author.dto";
+import {bookCopyService} from "./bookCollection.service";
 
 export class BookService {
   public async getAllBooks(): Promise<Book[]> {
@@ -39,6 +40,23 @@ export class BookService {
             return book;
         }
       return null;
+    }
+
+    //Supprime un livre par ID
+    public async deleteBook(id: number): Promise<void>{
+        const book = await Book.findByPk(id);
+        const bookCopies = await bookCopyService.getAllBooksCopy();
+
+        if(book){
+            bookCopies.forEach(function (bookCopy){
+                if(bookCopy.bookId == id){
+                    let error: Error = new Error("Book present in the collection");
+                    (error as any).status = 404;
+                    throw error;
+                }
+            })
+            await book.destroy();
+        }
     }
 }
 
