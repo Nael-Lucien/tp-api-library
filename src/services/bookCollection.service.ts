@@ -43,6 +43,12 @@ export class BookCollectionService{
         }
         return null;
     }
+
+    //Supprime un BookCopy par ID
+    public async deleteBookCopy(id: number): Promise<void>{
+        const bookCopy = await BookCopy.findByPk(id);
+        if (bookCopy) await bookCopy.destroy();
+    }
 }
 
 export const bookCopyService = new BookCollectionService();
