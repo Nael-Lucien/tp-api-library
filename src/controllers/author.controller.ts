@@ -4,6 +4,8 @@ import {AuthorDTO} from "../dto/author.dto";
 import {Author} from "../models/author.model";
 import {BookCopy} from "../models/bookCopy.model";
 import {Book} from "../models/book.model";
+import {BookDTO} from "../dto/book.dto";
+import {bookService} from "../services/book.service";
 
 @Route("authors")
 @Tags("Authors")
@@ -24,6 +26,29 @@ export class AuthorController extends Controller {
             throw error;
         } else {
             return author;
+        }
+    }
+
+    //Récupère la liste des livres de l'auteur
+    @Get("{id}/books")
+    public async getAuthorsBooks(@Path() id: number): Promise<BookDTO[]>{
+        let books;
+        let author= await authorService.getAuthorById(id);
+
+        if(author){
+            books = await bookService.getAuthorsBooks(id);
+        } else {
+            let error: Error = new Error("This author don't exists");
+            (error as any).status = 404;
+            throw error;
+        }
+
+        if(books){
+            return books;
+        } else {
+            let error: Error = new Error("This author don't have any books");
+            (error as any).status = 404;
+            throw error;
         }
     }
 

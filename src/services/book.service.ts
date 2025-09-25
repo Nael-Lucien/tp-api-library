@@ -58,6 +58,22 @@ export class BookService {
             await book.destroy();
         }
     }
+
+    //Récupère une liste de livre par ID d'auteur
+    public async getAuthorsBooks(id: number): Promise<Book[] | null>{
+        const books = await Book.findAll();
+        let authorBooks : Book[] | null = [];
+
+        if(books){
+            books.forEach(function (book){
+                if(book.authorId === id){
+                    authorBooks.push(book);
+                }
+            })
+        }
+
+        return authorBooks;
+    }
 }
 
 export const bookService = new BookService();
