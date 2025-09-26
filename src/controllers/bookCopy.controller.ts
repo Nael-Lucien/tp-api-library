@@ -1,9 +1,7 @@
-import {Body, Controller, Delete, Get, Patch, Path, Post, Route, Tags} from "tsoa";
+import {Body, Controller, Delete, Get, Patch, Path, Post, Route, Security, Tags} from "tsoa";
 import {BookCopyDTO} from "../dto/bookCopy.dto";
-import {BookCollectionService, bookCopyService} from "../services/bookCollection.service";
-import {BookCopy} from "../models/bookCopy.model";
-import {BookDTO} from "../dto/book.dto";
-import {bookService} from "../services/book.service";
+import {bookCopyService} from "../services/bookCollection.service";
+
 
 @Route("bookCopies")
 @Tags("BookCopies")

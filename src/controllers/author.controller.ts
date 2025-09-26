@@ -2,8 +2,6 @@ import {Controller, Get, Post, Delete, Route, Path, Body, Tags, Patch, Security}
 import {authorService} from "../services/author.service";
 import {AuthorDTO} from "../dto/author.dto";
 import {Author} from "../models/author.model";
-import {BookCopy} from "../models/bookCopy.model";
-import {Book} from "../models/book.model";
 import {BookDTO} from "../dto/book.dto";
 import {bookService} from "../services/book.service";
 
@@ -12,7 +10,6 @@ import {bookService} from "../services/book.service";
 export class AuthorController extends Controller {
     // Récupère tous les auteurs
     @Get("/")
-    @Security("jwt", ["write", "read"])
     public async getAllAuthors(): Promise<AuthorDTO[]> {
         return authorService.getAllAuthors();
     }

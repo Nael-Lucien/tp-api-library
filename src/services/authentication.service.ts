@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken"
 
 export class AuthenticationService{
     public async authenticate(username: string, password: string): Promise<string>{
-        const user = await User.findOne({ where: {username, password}})
+        const user = await User.findOne({ where: {username, password}, raw: true})
 
         if(!user){
             let error: Error = new Error("Invalid username or password");
