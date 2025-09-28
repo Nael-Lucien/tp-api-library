@@ -3,19 +3,19 @@ type Permissions = {
 };
 
 export const permission = {
-    admin: {
+    "admin": {
         "author": ["read", "write", "update", "delete"],
         "book": ["read", "write", "update", "delete"],
         "bookCopy": ["read", "write", "update", "delete"]
     },
 
-    manager: {
+    "manager": {
         "author": ["read", "write", "update"],
         "book": ["read", "write", "update"],
         "bookCopy": ["read", "write", "update", "delete"]
     },
 
-    user: {
+    "user": {
         "author": ["read"],
         "book": ["read", "write"],
         "bookCopy": ["read"]
