@@ -1,9 +1,10 @@
 import * as express from "express"
 import * as jwt from "jsonwebtoken"
+import { permission } from "../config/permission"
 
-let adminRights = ["read", "write", "update", "delete"];
-let managerRights = ["read", "write", "update"];
-let userRights = ["read"];
+const managerRights = permission.manager;
+const userRights = permission.user;
+
 
 export function expressAuthentication(
     request: express.Request,
@@ -18,12 +19,23 @@ export function expressAuthentication(
             } else {
                 jwt.verify(token, "your_secret_key",
                     function (error, decoded: any) {
-                        console.log(decoded.username);
-                        console.log(scopes);
-                        if(decoded.username !== scopes) {
-                            return reject(new Error("Permssion forbidden"));
+                        if(decoded.username === "admin") resolve(decoded);
+                        else if(decoded.username === "manager"){
+                            for (let permissionKey in permission.manager) {
+                                for(let type in permission.manager[permissionKey as keyof typeof permission.manager]){
+                                    if(scopes?.includes(type)){
+
+                                    }
+                                }
+                                console.log(permission.manager[permissionKey as keyof typeof permission.manager])
+                            }
+
                         }
-                        resolve(decoded);
+
+                        else if(decoded.username === "user") {
+                            if(scopes?.includes("update") || scopes?.includes("delete"))
+                                return reject(new Error("Permssion forbidden"));
+                        }
                     }
                 );
             }

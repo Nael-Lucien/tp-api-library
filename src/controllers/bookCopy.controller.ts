@@ -7,11 +7,13 @@ import {bookCopyService} from "../services/bookCollection.service";
 @Tags("BookCopies")
 export class BookCopyController extends Controller {
 
+    @Security("jwt", ["bookCopy", "read"])
     @Get("/")
     public async getAllBooksCopy(): Promise<BookCopyDTO[]> {
         return bookCopyService.getAllBooksCopy();
     }
 
+    @Security("jwt", ["bookCopy", "read"])
     @Get("{id}")
     public async getBookCopyById(id: number): Promise<BookCopyDTO> {
         let bookCopy = await bookCopyService.getBookCopyById(id);
@@ -25,6 +27,7 @@ export class BookCopyController extends Controller {
         }
     }
 
+    @Security("jwt", ["bookCopy", "write"])
     @Post("/")
     public async createBookCopy(@Body() requestBody: BookCopyDTO): Promise<BookCopyDTO> {
         const {book, available, state} = requestBody;
@@ -37,6 +40,7 @@ export class BookCopyController extends Controller {
         return bookCopyService.createBookCopy(book?.id, available, state);
     }
 
+    @Security("jwt", ["bookCopy", "update"])
     @Patch("{id}")
     public async updateBookCopy(@Path() id: number, @Body() requestBody: BookCopyDTO): Promise<BookCopyDTO | null> {
         const {book, available, state} = requestBody;
@@ -50,6 +54,7 @@ export class BookCopyController extends Controller {
     }
 
     //Supprime un BookCopy par ID
+    @Security("jwt", ["bookCopy", "delete"])
     @Delete("{id}")
     public async deleteBookCopy(@Path() id: number): Promise<void> {
         let bookCopy = await bookCopyService.deleteBookCopy(id);

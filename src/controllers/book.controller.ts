@@ -4,14 +4,15 @@ import {bookService} from "../services/book.service";
 
 @Route("books")
 @Tags("Books")
-@Security("jwt", ["admin"])
 export class BookController extends Controller {
+    @Security("jwt", ["book", "read"])
     @Get("/")
     public async getAllBooks(): Promise<BookDTO[]> {
         return bookService.getAllBooks();
     }
 
     // Récupère un livre par ID
+    @Security("jwt", ["book","read"])
     @Get("{id}")
     public async getBookById(id: number): Promise<BookDTO> {
         let book = await bookService.getBookById(id);
@@ -33,6 +34,7 @@ export class BookController extends Controller {
     }*/
 
     // Créer un nouveau livre
+    @Security("jwt", ["book","write"])
     @Post("/")
     public async createBook(@Body() requestBody: BookDTO): Promise<BookDTO> {
         const {title, publishYear, author, isbn} = requestBody;
@@ -47,6 +49,7 @@ export class BookController extends Controller {
     }
 
     //Met à jour un livre par ID
+    @Security("jwt", ["book","update"])
     @Patch("{id}")
     public async updateBook(@Path() id: number, @Body() requestBody: BookDTO): Promise<BookDTO | null> {
         const {title, publishYear, author, isbn} = requestBody;
@@ -61,6 +64,7 @@ export class BookController extends Controller {
     }
 
     //Supprime un livre par ID
+    @Security("jwt", ["book", "delete"])
     @Delete("{id}")
     public async deleteBook(@Path() id: number): Promise<void> {
         let book = await bookService.deleteBook(id);
