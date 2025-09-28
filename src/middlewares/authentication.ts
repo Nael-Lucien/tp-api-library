@@ -2,10 +2,6 @@ import * as express from "express"
 import * as jwt from "jsonwebtoken"
 import { permission } from "../config/permission"
 
-const managerRights = permission.manager;
-const userRights = permission.user;
-
-
 export function expressAuthentication(
     request: express.Request,
     securityName: string,
@@ -19,23 +15,44 @@ export function expressAuthentication(
             } else {
                 jwt.verify(token, "your_secret_key",
                     function (error, decoded: any) {
-                        if(decoded.username === "admin") resolve(decoded);
-                        else if(decoded.username === "manager"){
-                            for (let permissionKey in permission.manager) {
-                                for(let type in permission.manager[permissionKey as keyof typeof permission.manager]){
-                                    if(scopes?.includes(type)){
+                        let state = false;
 
+                        if(decoded.username === "admin"){
+                            state = true;
+                            resolve(decoded);
+                        }
+
+                        if(decoded.username === "manager"){
+                            for (let route in permission.manager) {
+                                for(let type of permission.manager[route as keyof typeof permission.manager]){
+                                    if(scopes){
+                                        if(scopes[0] === route){
+                                            if(scopes.includes(type)){
+                                                state = true;
+                                                resolve(decoded);
+                                            }
+                                        }
                                     }
                                 }
-                                console.log(permission.manager[permissionKey as keyof typeof permission.manager])
                             }
-
                         }
 
-                        else if(decoded.username === "user") {
-                            if(scopes?.includes("update") || scopes?.includes("delete"))
-                                return reject(new Error("Permssion forbidden"));
+                        if(decoded.username === "user"){
+                            for (let route in permission.user) {
+                                for(let type of permission.user[route as keyof typeof permission.user]){
+                                    if(scopes){
+                                        if(scopes[0] === route){
+                                            if(scopes.includes(type)){
+                                                state = true;
+                                                resolve(decoded);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
+
+                        if(!state) return reject(new Error("Permssion forbidden"));
                     }
                 );
             }
